@@ -1,5 +1,31 @@
-[gd_scene format=3 uid="uid://c1blhn3kdpcqd"]
+[gd_scene load_steps=6 format=3 uid="uid://c1blhn3kdpcqd"]
+
+[ext_resource type="Texture2D" uid="uid://luusopyogtwf" path="res://Assets/Stages/Floor.png" id="1_bhm8u"]
+[ext_resource type="PackedScene" uid="uid://bwxgkthlps6ok" path="res://Scenes/Player.tscn" id="2_5ms4e"]
+[ext_resource type="Script" uid="uid://d3tvw802m361" path="res://Scripts/PlayerCamera.gd" id="3_shgkq"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5ms4e"]
+texture = ExtResource("1_bhm8u")
+1:0/size_in_atlas = Vector2i(11, 3)
+1:0/0 = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-87.8133, -23.0687, 87.8133, -22.6334, 88.4822, 22.747, -88.0191, 23.7093)
+
+[sub_resource type="TileSet" id="TileSet_shgkq"]
+physics_layer_0/collision_layer = 2
+physics_layer_0/collision_mask = 2
+sources/0 = SubResource("TileSetAtlasSource_5ms4e")
 
 [node name="TestLevel" type="Node2D"]
 
 [node name="Ground" type="TileMapLayer" parent="."]
+scale = Vector2(1, 0.96)
+tile_map_data = PackedByteArray(0, 0, 5, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 250, 255, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 239, 255, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 15, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0)
+tile_set = SubResource("TileSet_shgkq")
+
+[node name="Player" parent="." instance=ExtResource("2_5ms4e")]
+position = Vector2(-100, -111)
+
+[node name="Camera2D" type="Camera2D" parent="." node_paths=PackedStringArray("target")]
+zoom = Vector2(2, 2)
+script = ExtResource("3_shgkq")
+target = NodePath("../Player")

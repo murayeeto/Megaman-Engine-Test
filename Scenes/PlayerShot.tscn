@@ -1,0 +1,74 @@
+[gd_scene load_steps=11 format=3 uid="uid://b1m5ceuy6vibl"]
+
+[ext_resource type="Script" uid="uid://cn66eovhwd664" path="res://Scripts/PlayerShot.gd" id="1_7k8md"]
+[ext_resource type="Texture2D" uid="uid://d2pcp0aakyyx7" path="res://Assets/Resources/Bullet_Strip6.png" id="1_hhm01"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hhm01"]
+size = Vector2(17, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lhkli"]
+atlas = ExtResource("1_hhm01")
+region = Rect2(0, 0, 16, 21)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wt06f"]
+atlas = ExtResource("1_hhm01")
+region = Rect2(16, 0, 16, 21)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_55v02"]
+atlas = ExtResource("1_hhm01")
+region = Rect2(32, 0, 16, 21)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i61vv"]
+atlas = ExtResource("1_hhm01")
+region = Rect2(48, 0, 16, 21)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nvv5h"]
+atlas = ExtResource("1_hhm01")
+region = Rect2(64, 0, 16, 21)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uepku"]
+atlas = ExtResource("1_hhm01")
+region = Rect2(80, 0, 16, 21)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1kw6c"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lhkli")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wt06f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_55v02")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i61vv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nvv5h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uepku")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
+[node name="PlayerShot" type="Area2D"]
+collision_layer = 4
+collision_mask = 10
+script = ExtResource("1_7k8md")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0.5, 0)
+shape = SubResource("RectangleShape2D_hhm01")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_1kw6c")
+frame_progress = 0.188567
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+position = Vector2(0.5, 0)
+scale = Vector2(0.85, 1)

@@ -110,7 +110,7 @@ func handle_input():
 		if not is_charging:
 			is_charging = true
 			charge_timer = 0.0
-			charge_sound.play()
+#			charge_sound.play()
 		charge_timer += get_physics_process_delta_time()
 	elif Input.is_action_just_released("shoot"):
 		shoot()
@@ -154,15 +154,15 @@ func handle_wall_mechanics():
 				wall_jump_timer = 0.2
 				facing_direction = sign(wall_normal.x)
 				animated_sprite.flip_h = facing_direction < 0
-				jump_sound.play()
+			#	jump_sound.play()
 	
 	# Wall slide effects
-	if is_wall_sliding and not was_wall_sliding:
-		wall_slide_particles.emitting = true
-		wall_slide_sound.play()
-	elif not is_wall_sliding and was_wall_sliding:
-		wall_slide_particles.emitting = false
-		wall_slide_sound.stop()
+	#if is_wall_sliding and not was_wall_sliding:
+	#	wall_slide_particles.emitting = true
+	#	wall_slide_sound.play()
+	#elif not is_wall_sliding and was_wall_sliding:
+	#	wall_slide_particles.emitting = false
+	#	wall_slide_sound.stop()
 
 func handle_jumping():
 	# Regular jump or coyote jump
@@ -170,7 +170,7 @@ func handle_jumping():
 		velocity.y = JUMP_VELOCITY
 		jump_buffer_timer = 0
 		coyote_timer = 0
-		jump_sound.play()
+		#jump_sound.play()
 
 func handle_dashing(delta):
 	# Dash input
@@ -194,12 +194,12 @@ func start_dash():
 	is_dashing = true
 	dash_timer = DASH_DURATION
 	can_dash = false
-	dash_particles.emitting = true
-	dash_sound.play()
+#	dash_particles.emitting = true
+#	dash_sound.play()
 
 func end_dash():
 	is_dashing = false
-	dash_particles.emitting = false
+#	dash_particles.emitting = false
 
 func handle_shooting(delta):
 	pass  # Shooting will be handled when shoot() is called
@@ -222,7 +222,7 @@ func shoot():
 	shot_scene.setup_shot(facing_direction, is_charged)
 	
 	# Play sound and reset shooting
-	shot_sound.play()
+	#shot_sound.play()
 	can_shoot = false
 	shot_timer = shot_cooldown
 	
@@ -231,18 +231,18 @@ func shoot():
 
 func update_animations():
 	if is_dashing:
-		animated_sprite.play("dash")
+		animated_sprite.play("Dash")
 	elif is_wall_sliding:
-		animated_sprite.play("wall_slide")
+		animated_sprite.play("Wall_Slide")
 	elif not is_on_floor():
 		if velocity.y < 0:
-			animated_sprite.play("jump")
+			animated_sprite.play("Jump")
 		else:
-			animated_sprite.play("fall")
+			animated_sprite.play("Fall")
 	elif abs(velocity.x) > 10:
-		animated_sprite.play("run")
+		animated_sprite.play("Walk")
 	else:
-		animated_sprite.play("idle")
+		animated_sprite.play("Idle")
 
 func handle_landing_effects():
 	# Play landing sound when hitting the ground

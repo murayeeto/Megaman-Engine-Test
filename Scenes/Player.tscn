@@ -1,14 +1,17 @@
-[gd_scene load_steps=65 format=3 uid="uid://bwxgkthlps6ok"]
+[gd_scene load_steps=68 format=3 uid="uid://bwxgkthlps6ok"]
 
 [ext_resource type="Script" uid="uid://b0hd7n8qn2to8" path="res://Scripts/Player.gd" id="1_0k4xd"]
+[ext_resource type="PackedScene" uid="uid://b1m5ceuy6vibl" path="res://Scenes/PlayerShot.tscn" id="2_glx4g"]
 [ext_resource type="Texture2D" uid="uid://b5ssi5a46v68" path="res://Assets/Player/Idle_Strip5.png" id="2_gntrk"]
 [ext_resource type="Texture2D" uid="uid://u123htownku7" path="res://Assets/Player/Dash_Strip4.png" id="2_megsn"]
 [ext_resource type="Texture2D" uid="uid://b2xk81btocns7" path="res://Assets/Player/Jump_Strip6.png" id="3_5ixxa"]
 [ext_resource type="Texture2D" uid="uid://b3qc7bhcv1av7" path="res://Assets/Player/Walk_Strip11.png" id="3_dewec"]
 [ext_resource type="Texture2D" uid="uid://ckyjgeidxxerr" path="res://Assets/Player/Dash_Shoot_Strip4.png" id="3_yoq75"]
 [ext_resource type="Texture2D" uid="uid://bdpxiqs28bc10" path="res://Assets/Player/Jump_Shoot_Strip6.png" id="4_5ixxa"]
+[ext_resource type="Texture2D" uid="uid://csw17m81ntrig" path="res://Assets/Player/Fall_Strip6.png" id="4_yoq75"]
 [ext_resource type="Texture2D" uid="uid://12hb4el6xp2d" path="res://Assets/Player/Walk_Shoot_Strip11.png" id="6_nn08x"]
 [ext_resource type="Texture2D" uid="uid://dv5ph60j8ekw5" path="res://Assets/Player/Shoot_Strip6.png" id="7_ksbbd"]
+[ext_resource type="Texture2D" uid="uid://cc5nqmprtetdn" path="res://Assets/Player/Wall_Slide_Strip1.png" id="11_ksbbd"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vmcrb"]
 atlas = ExtResource("2_megsn")
@@ -260,6 +263,14 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": ExtResource("4_yoq75")
+}],
+"loop": true,
+"name": &"Fall",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_5ixxa")
 }, {
 "duration": 1.0,
@@ -422,20 +433,29 @@ animations = [{
 "loop": true,
 "name": &"Walk_Shoot",
 "speed": 11.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("11_ksbbd")
+}],
+"loop": true,
+"name": &"Wall_Slide",
+"speed": 5.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x63xi"]
 size = Vector2(18, 36)
 
 [node name="Player" type="CharacterBody2D"]
+collision_mask = 2
 script = ExtResource("1_0k4xd")
+PlayerShotScene = ExtResource("2_glx4g")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(24, -19)
 sprite_frames = SubResource("SpriteFrames_5v66d")
-animation = &"Shoot"
+animation = &"Idle"
 autoplay = "Idle"
-frame_progress = 0.901671
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(24, -19)
