@@ -8,7 +8,7 @@ const JUMP_VELOCITY = -400.0
 const WALL_JUMP_VELOCITY = -350.0
 const WALL_SLIDE_SPEED = 100.0
 const DASH_SPEED = 300.0
-const DASH_DURATION = 0.15
+const DASH_DURATION = 0.30
 
 # Physics
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -36,7 +36,14 @@ var shoot_animation_duration = 0.3
 @onready var animated_sprite = $AnimatedSprite2D
 @onready var dash_particles = $DashParticles
 @onready var wall_slide_particles = $WallSlideParticles
-@onready var shot_spawn_point = $ShotSpawnPoint
+# Shot spawn points for different states
+@onready var shot_spawn_idle = $ShotSpawnPoints/ShotSpawnIdle
+@onready var shot_spawn_jump = $ShotSpawnPoints/ShotSpawnJump
+@onready var shot_spawn_dash = $ShotSpawnPoints/ShotSpawnDash
+@onready var shot_spawn_walk = $ShotSpawnPoints/ShotSpawnWalk
+
+# Store original positions to avoid accumulating offsets
+var original_spawn_positions = {}
 
 # Audio
 @onready var jump_sound = $AudioPlayers/JumpSound
@@ -55,6 +62,12 @@ var was_on_floor = false
 func _ready():
 	# Initialize sprite facing direction
 	animated_sprite.flip_h = false
+	
+	# Store original spawn point positions
+	original_spawn_positions[shot_spawn_idle] = shot_spawn_idle.position
+	original_spawn_positions[shot_spawn_walk] = shot_spawn_walk.position
+	original_spawn_positions[shot_spawn_jump] = shot_spawn_jump.position
+	original_spawn_positions[shot_spawn_dash] = shot_spawn_dash.position
 
 func _physics_process(delta):
 	handle_timers(delta)
@@ -153,7 +166,7 @@ func handle_wall_mechanics():
 		var direction = Input.get_axis("move_left", "move_right")
 		
 		# Check if player is pressing into the wall
-		if (wall_normal.x > 0 and direction < 0) or (wall_normal.x < 0 and direction > 0):
+		if (wall_normal.x > 0 and direction < 0) or (wall_normal.x < 0 and direction > 0) and velocity.y > 0:
 			is_wall_sliding = true
 			
 			# Wall jump
@@ -174,11 +187,20 @@ func handle_wall_mechanics():
 	#	wall_slide_sound.stop()
 
 func handle_jumping():
-	# Regular jump or coyote jump
+	# Regular jump or coyote jump (now allows jumping while dashing on ground)
 	if jump_buffer_timer > 0 and (is_on_floor() or coyote_timer > 0) and not is_wall_sliding:
 		velocity.y = JUMP_VELOCITY
 		jump_buffer_timer = 0
 		coyote_timer = 0
+		
+		# Cancel dash if jumping while dashing (enhanced dash momentum)
+		if is_dashing and is_on_floor():
+			# Preserve current dash momentum + boost
+			var current_dash_velocity = abs(velocity.x)
+			var enhanced_velocity = max(current_dash_velocity * 1.3, DASH_SPEED * 1.25)
+			velocity.x = facing_direction * enhanced_velocity
+			end_dash()
+		
 		#jump_sound.play()
 
 func handle_dashing(delta):
@@ -189,8 +211,24 @@ func handle_dashing(delta):
 	# Dash mechanics
 	if is_dashing:
 		dash_timer -= delta
-		velocity.x = facing_direction * DASH_SPEED
-		velocity.y = 0  # Maintain height during dash
+		
+		# Accelerate to dash speed rather than instant velocity
+		var target_dash_velocity = facing_direction * DASH_SPEED
+		var current_velocity_abs = abs(velocity.x)
+		
+		# If we're not at dash speed yet, accelerate quickly
+		if current_velocity_abs < DASH_SPEED:
+			velocity.x = move_toward(velocity.x, target_dash_velocity, DASH_SPEED * 8 * delta)
+		else:
+			# Maintain dash speed (but allow for higher speeds from momentum)
+			if sign(velocity.x) == facing_direction:
+				velocity.x = max(abs(velocity.x), DASH_SPEED) * facing_direction
+			else:
+				velocity.x = target_dash_velocity
+		
+		# Only maintain height if on ground (allows jumping while dashing)
+		if is_on_floor():
+			velocity.y = 0  # Maintain height during ground dash
 		
 		if dash_timer <= 0:
 			end_dash()
@@ -223,8 +261,9 @@ func shoot():
 	var shot_scene = PlayerShotScene.instantiate()
 	get_tree().current_scene.add_child(shot_scene)
 	
-	# Position the shot at the spawn point
-	shot_scene.global_position = shot_spawn_point.global_position
+	# Position the shot at the appropriate spawn point based on player state
+	var spawn_point = get_current_shot_spawn_point()
+	shot_scene.global_position = spawn_point.global_position
 	
 	# Set shot direction and properties based on charge
 	var is_charged = charge_timer >= max_charge_time
@@ -277,6 +316,73 @@ func update_animations():
 	# Only change animation if it's different to avoid restarting the same animation
 	if animated_sprite.animation != animation_to_play:
 		animated_sprite.play(animation_to_play)
+		adjust_sprite_offset(animation_to_play)
+
+func get_current_shot_spawn_point() -> Node2D:
+	# Return appropriate shot spawn point based on player state
+	var spawn_point: Node2D
+	
+	if is_dashing:
+		spawn_point = shot_spawn_dash
+	elif not is_on_floor():
+		# In air (jumping or falling)
+		spawn_point = shot_spawn_jump
+	elif abs(velocity.x) > 10:
+		# Walking/running
+		spawn_point = shot_spawn_walk
+	else:
+		# Idle/standing
+		spawn_point = shot_spawn_idle
+	
+	# Advanced directional positioning with custom offsets for left vs right
+	adjust_spawn_point_for_direction(spawn_point)
+	
+	return spawn_point
+
+func adjust_spawn_point_for_direction(spawn_point: Node2D):
+	# Get the original position (stored at _ready) - NOT the current position
+	var original_pos = original_spawn_positions[spawn_point]
+	
+	if facing_direction < 0:  # Facing left
+		# Custom left-facing positions with additional offset adjustments
+		if spawn_point == shot_spawn_idle:
+			spawn_point.position = Vector2(-abs(original_pos.x) - 17, original_pos.y)  # Extra 2 pixels left
+		elif spawn_point == shot_spawn_walk:
+			spawn_point.position = Vector2(-abs(original_pos.x) - 35, original_pos.y)  # Extra 3 pixels left, 1 up
+		elif spawn_point == shot_spawn_jump:
+			spawn_point.position = Vector2(-abs(original_pos.x) - 30, original_pos.y)  # Extra 1 pixel left, 1 down
+		elif spawn_point == shot_spawn_dash:
+			spawn_point.position = Vector2(-abs(original_pos.x) - 35, original_pos.y)  # Extra 4 pixels left, 2 up
+	else:  # Facing right
+		# Restore original right-facing position
+		spawn_point.position = original_pos
+
+func adjust_sprite_offset(animation_name: String):
+	# Adjust sprite position based on animation to keep feet aligned
+	# You'll need to tweak these values based on your specific sprites
+	match animation_name:
+		"Idle":
+			animated_sprite.position.y = -19  # Base position
+		"Walk":
+			animated_sprite.position.y = -19  # Same as idle
+		"Walk_Shoot":
+			animated_sprite.position.y = -19  # Same as idle
+		"Jump":
+			animated_sprite.position.y = -19  # Adjust if jump sprite is different height
+		"Jump_Shoot":
+			animated_sprite.position.y = -19  # Match jump
+		"Fall":
+			animated_sprite.position.y = -19  # Adjust if fall sprite is different
+		"Dash":
+			animated_sprite.position.y = -19  # Adjust if dash sprite is different height
+		"Dash_Shoot":
+			animated_sprite.position.y = -19  # Match dash
+		"Shoot":
+			animated_sprite.position.y = -23  # Adjust if shooting changes height
+		"Wall_Slide":
+			animated_sprite.position.y = -19  # Adjust for wall slide
+		_:
+			animated_sprite.position.y = -19  # Default position
 
 func handle_landing_effects():
 	# Play landing sound when hitting the ground

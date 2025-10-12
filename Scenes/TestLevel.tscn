@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://c1blhn3kdpcqd"]
+[gd_scene load_steps=6 format=4 uid="uid://c1blhn3kdpcqd"]
 
 [ext_resource type="Texture2D" uid="uid://luusopyogtwf" path="res://Assets/Stages/Floor.png" id="1_bhm8u"]
 [ext_resource type="PackedScene" uid="uid://bwxgkthlps6ok" path="res://Scenes/Player.tscn" id="2_5ms4e"]
@@ -19,7 +19,7 @@ sources/0 = SubResource("TileSetAtlasSource_5ms4e")
 
 [node name="Ground" type="TileMapLayer" parent="."]
 scale = Vector2(1, 0.96)
-tile_map_data = PackedByteArray(0, 0, 5, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 250, 255, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 239, 255, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 15, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0)
+tile_map_data = PackedByteArray("AAAFAAEAAAABAAAAAAD6/wEAAAABAAAAAADv/wEAAAABAAAAAAAPAAEAAAABAAAAAADk/wEAAAABAAAAAADZ/wEAAAABAAAAAADO/wEAAAABAAAAAADD/wEAAAABAAAAAAAaAAEAAAABAAAAAAAlAAEAAAABAAAAAAAwAAEAAAABAAAAAADD/wQAAAABAAAAAADD/wcAAAABAAAAAADD/woAAAABAAAAAADD/w0AAAABAAAAAADD/w4AAAABAAAAAADD/xAAAAABAAAAAADD/xMAAAABAAAAAAA=")
 tile_set = SubResource("TileSet_shgkq")
 
 [node name="Player" parent="." instance=ExtResource("2_5ms4e")]

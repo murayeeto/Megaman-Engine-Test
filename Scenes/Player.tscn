@@ -461,15 +461,26 @@ script = ExtResource("1_0k4xd")
 PlayerShotScene = ExtResource("2_glx4g")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-position = Vector2(24, -22)
+position = Vector2(24, -24)
 sprite_frames = SubResource("SpriteFrames_5v66d")
-animation = &"Shoot"
+animation = &"Jump_Shoot"
 autoplay = "Idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(24, -19)
 shape = SubResource("RectangleShape2D_x63xi")
 
-[node name="ShotSpawnPoint" type="Marker2D" parent="."]
+[node name="ShotSpawnPoints" type="Node2D" parent="."]
 position = Vector2(40, -24)
-gizmo_extents = 20.5
+
+[node name="ShotSpawnIdle" type="Marker2D" parent="ShotSpawnPoints"]
+position = Vector2(0, -2)
+
+[node name="ShotSpawnJump" type="Marker2D" parent="ShotSpawnPoints"]
+position = Vector2(4, -7)
+
+[node name="ShotSpawnDash" type="Marker2D" parent="ShotSpawnPoints"]
+position = Vector2(9, 0)
+
+[node name="ShotSpawnWalk" type="Marker2D" parent="ShotSpawnPoints"]
+position = Vector2(0, -2)
