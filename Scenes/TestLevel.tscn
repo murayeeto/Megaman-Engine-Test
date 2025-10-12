@@ -8,7 +8,7 @@
 texture = ExtResource("1_bhm8u")
 1:0/size_in_atlas = Vector2i(11, 3)
 1:0/0 = 0
-1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-87.8133, -23.0687, 87.8133, -22.6334, 88.4822, 22.747, -88.0191, 23.7093)
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-87.9686, -24.0123, 88.0832, -24.0123, 88.4822, 22.747, -88.0191, 23.7093)
 
 [sub_resource type="TileSet" id="TileSet_shgkq"]
 physics_layer_0/collision_layer = 2

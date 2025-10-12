@@ -28,6 +28,9 @@ var shot_timer = 0.0
 var is_charging = false
 var charge_timer = 0.0
 var max_charge_time = 2.0
+var is_shooting = false
+var shoot_animation_timer = 0.0
+var shoot_animation_duration = 0.3
 
 # Animation and visuals
 @onready var animated_sprite = $AnimatedSprite2D
@@ -93,6 +96,12 @@ func handle_timers(delta):
 		shot_timer -= delta
 		if shot_timer <= 0:
 			can_shoot = true
+	
+	# Shooting animation timer
+	if shoot_animation_timer > 0:
+		shoot_animation_timer -= delta
+		if shoot_animation_timer <= 0:
+			is_shooting = false
 
 func handle_input():
 	# Movement input
@@ -115,7 +124,7 @@ func handle_input():
 	elif Input.is_action_just_released("shoot"):
 		shoot()
 		is_charging = false
-		charge_sound.stop()
+#		charge_sound.stop()
 
 func handle_gravity(delta):
 	if not is_on_floor():
@@ -221,6 +230,10 @@ func shoot():
 	var is_charged = charge_timer >= max_charge_time
 	shot_scene.setup_shot(facing_direction, is_charged)
 	
+	# Trigger shooting animation
+	is_shooting = true
+	shoot_animation_timer = shoot_animation_duration
+	
 	# Play sound and reset shooting
 	#shot_sound.play()
 	can_shoot = false
@@ -230,19 +243,40 @@ func shoot():
 	charge_timer = 0.0
 
 func update_animations():
+	var animation_to_play = ""
+	
+	# Determine base animation based on movement state
 	if is_dashing:
-		animated_sprite.play("Dash")
+		if is_shooting:
+			animation_to_play = "Dash_Shoot"
+		else:
+			animation_to_play = "Dash"
 	elif is_wall_sliding:
-		animated_sprite.play("Wall_Slide")
+		# Wall slide doesn't have a shooting variant in your sprites
+		animation_to_play = "Wall_Slide"
 	elif not is_on_floor():
 		if velocity.y < 0:
-			animated_sprite.play("Jump")
+			if is_shooting:
+				animation_to_play = "Jump_Shoot"
+			else:
+				animation_to_play = "Jump"
 		else:
-			animated_sprite.play("Fall")
+			# Fall animation - you might want to add Fall_Shoot if you have it
+			animation_to_play = "Fall"
 	elif abs(velocity.x) > 10:
-		animated_sprite.play("Walk")
+		if is_shooting:
+			animation_to_play = "Walk_Shoot"
+		else:
+			animation_to_play = "Walk"
 	else:
-		animated_sprite.play("Idle")
+		if is_shooting:
+			animation_to_play = "Shoot"
+		else:
+			animation_to_play = "Idle"
+	
+	# Only change animation if it's different to avoid restarting the same animation
+	if animated_sprite.animation != animation_to_play:
+		animated_sprite.play(animation_to_play)
 
 func handle_landing_effects():
 	# Play landing sound when hitting the ground

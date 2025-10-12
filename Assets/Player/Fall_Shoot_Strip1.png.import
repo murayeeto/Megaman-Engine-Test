@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ufmojljhxrf6"
-path="res://.godot/imported/Wall_Slide_Strip1.png-684ff1f06cc97ff4691b475b9cd683e6.ctex"
+uid="uid://dxwxo60eaaqd7"
+path="res://.godot/imported/Fall_Shoot_Strip1.png-d11200bd661a49a376ef236493055eb3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Player/Wall_Slide_Strip1.png"
-dest_files=["res://.godot/imported/Wall_Slide_Strip1.png-684ff1f06cc97ff4691b475b9cd683e6.ctex"]
+source_file="res://Assets/Player/Fall_Shoot_Strip1.png"
+dest_files=["res://.godot/imported/Fall_Shoot_Strip1.png-d11200bd661a49a376ef236493055eb3.ctex"]
 
 [params]
 

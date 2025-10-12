@@ -12,7 +12,7 @@ var speed = NORMAL_SPEED
 var damage = NORMAL_DAMAGE
 var is_charged = false
 
-@onready var sprite = $Sprite2D
+@onready var sprite = $AnimatedSprite2D
 @onready var collision = $CollisionShape2D
 @onready var hit_particles = $HitParticles
 @onready var hit_sound = $HitSound

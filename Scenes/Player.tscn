@@ -1,4 +1,4 @@
-[gd_scene load_steps=68 format=3 uid="uid://bwxgkthlps6ok"]
+[gd_scene load_steps=69 format=3 uid="uid://bwxgkthlps6ok"]
 
 [ext_resource type="Script" uid="uid://b0hd7n8qn2to8" path="res://Scripts/Player.gd" id="1_0k4xd"]
 [ext_resource type="PackedScene" uid="uid://b1m5ceuy6vibl" path="res://Scenes/PlayerShot.tscn" id="2_glx4g"]
@@ -9,9 +9,10 @@
 [ext_resource type="Texture2D" uid="uid://ckyjgeidxxerr" path="res://Assets/Player/Dash_Shoot_Strip4.png" id="3_yoq75"]
 [ext_resource type="Texture2D" uid="uid://bdpxiqs28bc10" path="res://Assets/Player/Jump_Shoot_Strip6.png" id="4_5ixxa"]
 [ext_resource type="Texture2D" uid="uid://csw17m81ntrig" path="res://Assets/Player/Fall_Strip6.png" id="4_yoq75"]
+[ext_resource type="Texture2D" uid="uid://dxwxo60eaaqd7" path="res://Assets/Player/Fall_Shoot_Strip1.png" id="6_miouo"]
 [ext_resource type="Texture2D" uid="uid://12hb4el6xp2d" path="res://Assets/Player/Walk_Shoot_Strip11.png" id="6_nn08x"]
 [ext_resource type="Texture2D" uid="uid://dv5ph60j8ekw5" path="res://Assets/Player/Shoot_Strip6.png" id="7_ksbbd"]
-[ext_resource type="Texture2D" uid="uid://cc5nqmprtetdn" path="res://Assets/Player/Wall_Slide_Strip1.png" id="11_ksbbd"]
+[ext_resource type="Texture2D" uid="uid://ufmojljhxrf6" path="res://Assets/Player/Wall_Slide_Strip1.png" id="11_ksbbd"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vmcrb"]
 atlas = ExtResource("2_megsn")
@@ -271,6 +272,14 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": ExtResource("6_miouo")
+}],
+"loop": true,
+"name": &"Fall_Shoot",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_5ixxa")
 }, {
 "duration": 1.0,
@@ -452,11 +461,15 @@ script = ExtResource("1_0k4xd")
 PlayerShotScene = ExtResource("2_glx4g")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-position = Vector2(24, -19)
+position = Vector2(24, -22)
 sprite_frames = SubResource("SpriteFrames_5v66d")
-animation = &"Idle"
+animation = &"Shoot"
 autoplay = "Idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(24, -19)
 shape = SubResource("RectangleShape2D_x63xi")
+
+[node name="ShotSpawnPoint" type="Marker2D" parent="."]
+position = Vector2(40, -24)
+gizmo_extents = 20.5

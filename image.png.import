@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ufmojljhxrf6"
-path="res://.godot/imported/Wall_Slide_Strip1.png-684ff1f06cc97ff4691b475b9cd683e6.ctex"
+uid="uid://dvl0q8w5ff1y0"
+path="res://.godot/imported/image.png-2de165adb17dfebcee8a7cd6c9833936.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Player/Wall_Slide_Strip1.png"
-dest_files=["res://.godot/imported/Wall_Slide_Strip1.png-684ff1f06cc97ff4691b475b9cd683e6.ctex"]
+source_file="res://image.png"
+dest_files=["res://.godot/imported/image.png-2de165adb17dfebcee8a7cd6c9833936.ctex"]
 
 [params]
 
