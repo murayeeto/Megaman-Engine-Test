@@ -14,8 +14,10 @@ var is_charged = false
 
 @onready var sprite = $AnimatedSprite2D
 @onready var collision = $CollisionShape2D
+@onready var charge_collision = $ChargeShotCollisionShape2D
 @onready var hit_particles = $HitParticles
 @onready var hit_sound = $HitSound
+@onready var Chargeshot_Sound = $ChargedShot
 
 func _ready():
 	# Connect area entered signal for collision detection
@@ -44,12 +46,22 @@ func setup_shot(shot_direction: int, charged: bool = false):
 		# Scale up charged shot
 		scale = Vector2(1.5, 1.5)
 		# Change color/sprite for charged shot
-		modulate = Color.CYAN
+		$AnimatedSprite2D.play("ChargedShot")
+		Chargeshot_Sound.play()
+		
+		# Use charge shot collision shape
+		collision.disabled = true
+		charge_collision.disabled = false
 	else:
+		$AnimatedSprite2D.play("default")
 		speed = NORMAL_SPEED
 		damage = NORMAL_DAMAGE
 		scale = Vector2.ONE
 		modulate = Color.WHITE
+		
+		# Use normal shot collision shape
+		collision.disabled = false
+		charge_collision.disabled = true
 	
 	# Flip sprite if shooting left
 	if direction < 0:

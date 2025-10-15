@@ -1,10 +1,36 @@
-[gd_scene load_steps=11 format=3 uid="uid://b1m5ceuy6vibl"]
+[gd_scene load_steps=20 format=3 uid="uid://b1m5ceuy6vibl"]
 
 [ext_resource type="Script" uid="uid://cn66eovhwd664" path="res://Scripts/PlayerShot.gd" id="1_7k8md"]
 [ext_resource type="Texture2D" uid="uid://d2pcp0aakyyx7" path="res://Assets/Resources/Bullet_Strip6.png" id="1_hhm01"]
+[ext_resource type="Texture2D" uid="uid://mibbuwv13uph" path="res://Assets/Resources/ChargedShot_Strip6.png" id="2_wt06f"]
+[ext_resource type="AudioStream" uid="uid://cm6w05iry2pnx" path="res://Assets/Resources/sfx/ChargedShot.wav" id="4_55v02"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hhm01"]
 size = Vector2(17, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1kw6c"]
+atlas = ExtResource("2_wt06f")
+region = Rect2(0, 0, 64, 33)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6brj3"]
+atlas = ExtResource("2_wt06f")
+region = Rect2(64, 0, 64, 33)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bdxh7"]
+atlas = ExtResource("2_wt06f")
+region = Rect2(128, 0, 64, 33)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ji15d"]
+atlas = ExtResource("2_wt06f")
+region = Rect2(192, 0, 64, 33)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1p0wa"]
+atlas = ExtResource("2_wt06f")
+region = Rect2(256, 0, 64, 33)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s7vry"]
+atlas = ExtResource("2_wt06f")
+region = Rect2(320, 0, 64, 33)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_lhkli"]
 atlas = ExtResource("1_hhm01")
@@ -34,6 +60,29 @@ region = Rect2(80, 0, 16, 21)
 animations = [{
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_1kw6c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6brj3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bdxh7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ji15d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1p0wa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s7vry")
+}],
+"loop": true,
+"name": &"ChargedShot",
+"speed": 15.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_lhkli")
 }, {
 "duration": 1.0,
@@ -53,8 +102,11 @@ animations = [{
 }],
 "loop": true,
 "name": &"default",
-"speed": 10.0
+"speed": 20.0
 }]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_55v02"]
+size = Vector2(52, 28)
 
 [node name="PlayerShot" type="Area2D"]
 collision_layer = 4
@@ -67,8 +119,16 @@ shape = SubResource("RectangleShape2D_hhm01")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_1kw6c")
-frame_progress = 0.353375
+animation = &"ChargedShot"
+frame_progress = 0.0890486
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
 position = Vector2(0.5, 0)
 scale = Vector2(0.85, 1)
+
+[node name="ChargedShot" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_55v02")
+
+[node name="ChargeShotCollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -2)
+shape = SubResource("RectangleShape2D_55v02")

@@ -12,7 +12,7 @@ A complete Megaman X styled platformer engine template built in Godot 4.4. This 
 - **Dashing**: Air dash with cooldown system (resets on ground or wall)
 - **Shooting**: Normal and charged shots with proper cooldowns
 - **Particle Effects**: Visual feedback for dashing and wall sliding
-
+![alt text](image.png)
 ### Technical Features
 - **Physics Layers**: Proper collision layers for player, terrain, and projectiles
 - **Camera System**: Smooth following camera with look-ahead

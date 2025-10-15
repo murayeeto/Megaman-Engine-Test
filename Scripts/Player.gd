@@ -27,13 +27,16 @@ var shot_cooldown = 0.1
 var shot_timer = 0.0
 var is_charging = false
 var charge_timer = 0.0
-var max_charge_time = 2.0
+var max_charge_time = 0.8
+var charge_sound_started = false
+var charge_loop_started = false
 var is_shooting = false
 var shoot_animation_timer = 0.0
 var shoot_animation_duration = 0.3
 
 # Animation and visuals
 @onready var animated_sprite = $AnimatedSprite2D
+@onready var charge_effect_sprite = $ChargeEffectSprite
 @onready var dash_particles = $DashParticles
 @onready var wall_slide_particles = $WallSlideParticles
 # Shot spawn points for different states
@@ -52,6 +55,7 @@ var original_spawn_positions = {}
 @onready var wall_slide_sound = $AudioPlayers/WallSlideSound
 @onready var shot_sound = $AudioPlayers/ShotSound
 @onready var charge_sound = $AudioPlayers/ChargeSound
+@onready var charge_loop_sound = $AudioPlayers/ChargeLoopSound
 
 # Preloaded scenes
 @export var PlayerShotScene: PackedScene
@@ -132,12 +136,22 @@ func handle_input():
 		if not is_charging:
 			is_charging = true
 			charge_timer = 0.0
-#			charge_sound.play()
+			charge_sound_started = false
+			charge_loop_started = false
+			charge_sound.play()
+		
 		charge_timer += get_physics_process_delta_time()
+		
+		# Handle charge sound progression
+		handle_charge_sound()
+		
 	elif Input.is_action_just_released("shoot"):
 		shoot()
 		is_charging = false
-#		charge_sound.stop()
+		charge_sound_started = false
+		charge_loop_started = false
+		charge_sound.stop()
+		charge_loop_sound.stop()
 
 func handle_gravity(delta):
 	if not is_on_floor():
@@ -176,15 +190,15 @@ func handle_wall_mechanics():
 				wall_jump_timer = 0.2
 				facing_direction = sign(wall_normal.x)
 				animated_sprite.flip_h = facing_direction < 0
-			#	jump_sound.play()
+				jump_sound.play()
 	
 	# Wall slide effects
-	#if is_wall_sliding and not was_wall_sliding:
-	#	wall_slide_particles.emitting = true
-	#	wall_slide_sound.play()
-	#elif not is_wall_sliding and was_wall_sliding:
-	#	wall_slide_particles.emitting = false
-	#	wall_slide_sound.stop()
+	if is_wall_sliding and not was_wall_sliding:
+		wall_slide_particles.emitting = true
+		wall_slide_sound.play()
+	elif not is_wall_sliding and was_wall_sliding:
+		wall_slide_particles.emitting = false
+		wall_slide_sound.stop()
 
 func handle_jumping():
 	# Regular jump or coyote jump (now allows jumping while dashing on ground)
@@ -201,7 +215,7 @@ func handle_jumping():
 			velocity.x = facing_direction * enhanced_velocity
 			end_dash()
 		
-		#jump_sound.play()
+		jump_sound.play()
 
 func handle_dashing(delta):
 	# Dash input
@@ -242,7 +256,7 @@ func start_dash():
 	dash_timer = DASH_DURATION
 	can_dash = false
 #	dash_particles.emitting = true
-#	dash_sound.play()
+	dash_sound.play()
 
 func end_dash():
 	is_dashing = false
@@ -274,7 +288,8 @@ func shoot():
 	shoot_animation_timer = shoot_animation_duration
 	
 	# Play sound and reset shooting
-	#shot_sound.play()
+	
+	shot_sound.play()
 	can_shoot = false
 	shot_timer = shot_cooldown
 	
@@ -313,10 +328,13 @@ func update_animations():
 		else:
 			animation_to_play = "Idle"
 	
-	# Only change animation if it's different to avoid restarting the same animation
-	if animated_sprite.animation != animation_to_play:
+	# Play animation (only restart if different or not currently playing)
+	if animated_sprite.animation != animation_to_play or not animated_sprite.is_playing():
 		animated_sprite.play(animation_to_play)
 		adjust_sprite_offset(animation_to_play)
+	
+	# Update visual effects for charged shot
+	update_charge_visual_effect()
 
 func get_current_shot_spawn_point() -> Node2D:
 	# Return appropriate shot spawn point based on player state
@@ -388,6 +406,38 @@ func handle_landing_effects():
 	# Play landing sound when hitting the ground
 	if is_on_floor() and not was_on_floor and velocity.y > 100:
 		land_sound.play()
+
+func update_charge_visual_effect():
+	# Check if player has a charged shot ready
+	var is_charged_ready = charge_timer >= max_charge_time
+	
+	if is_charged_ready:
+		# Show and play charge effect animation on top of player
+		charge_effect_sprite.visible = true
+		if charge_effect_sprite.animation != "default" or not charge_effect_sprite.is_playing():
+			charge_effect_sprite.play("default")
+	else:
+		# Hide charge effect when not charged
+		charge_effect_sprite.visible = false
+		charge_effect_sprite.stop()
+
+func handle_charge_sound():
+	# Start initial charge sound when charging begins
+	if not charge_sound_started:
+		charge_sound_started = true
+		charge_sound.play()
+	
+	# Check if we should start the loop sound (after 1.4 seconds of charging)
+	if charge_timer >= 1.4 and not charge_loop_started:
+		charge_loop_started = true
+		# Stop initial charge sound and start looping sound
+		charge_sound.stop()
+		charge_loop_sound.play()
+	
+	# Keep the loop sound playing while charged (in case it stops)
+	elif charge_loop_started and not charge_loop_sound.is_playing():
+		# Restart loop if it stopped
+		charge_loop_sound.play()
 
 func take_damage(amount: int):
 	# Placeholder for damage system

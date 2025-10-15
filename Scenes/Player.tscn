@@ -1,4 +1,4 @@
-[gd_scene load_steps=69 format=3 uid="uid://bwxgkthlps6ok"]
+[gd_scene load_steps=84 format=3 uid="uid://bwxgkthlps6ok"]
 
 [ext_resource type="Script" uid="uid://b0hd7n8qn2to8" path="res://Scripts/Player.gd" id="1_0k4xd"]
 [ext_resource type="PackedScene" uid="uid://b1m5ceuy6vibl" path="res://Scenes/PlayerShot.tscn" id="2_glx4g"]
@@ -13,6 +13,13 @@
 [ext_resource type="Texture2D" uid="uid://12hb4el6xp2d" path="res://Assets/Player/Walk_Shoot_Strip11.png" id="6_nn08x"]
 [ext_resource type="Texture2D" uid="uid://dv5ph60j8ekw5" path="res://Assets/Player/Shoot_Strip6.png" id="7_ksbbd"]
 [ext_resource type="Texture2D" uid="uid://ufmojljhxrf6" path="res://Assets/Player/Wall_Slide_Strip1.png" id="11_ksbbd"]
+[ext_resource type="Texture2D" uid="uid://cmf3ud5ksfs7j" path="res://Assets/Resources/Charge_Strip7.png" id="14_o3h8g"]
+[ext_resource type="AudioStream" uid="uid://bmf5gl45kfa8l" path="res://Assets/Resources/sfx/JumpSound.wav" id="15_1e7my"]
+[ext_resource type="AudioStream" uid="uid://tga28g1aox4b" path="res://Assets/Resources/sfx/DashSound.wav" id="16_1iu4k"]
+[ext_resource type="AudioStream" uid="uid://cq5kxqk8dod5i" path="res://Assets/Resources/sfx/LandSound.wav" id="17_m0x7a"]
+[ext_resource type="AudioStream" uid="uid://cmxeegublo2gg" path="res://Assets/Resources/sfx/ShotSound.wav" id="18_5v66d"]
+[ext_resource type="AudioStream" uid="uid://cutn168ivcmjs" path="res://Assets/Resources/sfx/ChargeSound.wav" id="19_x63xi"]
+[ext_resource type="AudioStream" uid="uid://di0pndvqlsu7n" path="res://Assets/Resources/sfx/ChargeLoopSound.mp3" id="20_m0x7a"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vmcrb"]
 atlas = ExtResource("2_megsn")
@@ -452,6 +459,63 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_omi2y"]
+atlas = ExtResource("14_o3h8g")
+region = Rect2(0, 0, 111, 111)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_75iyv"]
+atlas = ExtResource("14_o3h8g")
+region = Rect2(111, 0, 111, 111)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yrofn"]
+atlas = ExtResource("14_o3h8g")
+region = Rect2(222, 0, 111, 111)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5gg6q"]
+atlas = ExtResource("14_o3h8g")
+region = Rect2(333, 0, 111, 111)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wenux"]
+atlas = ExtResource("14_o3h8g")
+region = Rect2(444, 0, 111, 111)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vy33c"]
+atlas = ExtResource("14_o3h8g")
+region = Rect2(555, 0, 111, 111)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h1ppb"]
+atlas = ExtResource("14_o3h8g")
+region = Rect2(666, 0, 111, 111)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_k22kr"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_omi2y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_75iyv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yrofn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5gg6q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wenux")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vy33c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h1ppb")
+}],
+"loop": true,
+"name": &"default",
+"speed": 15.0
+}]
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x63xi"]
 size = Vector2(18, 36)
 
@@ -465,6 +529,11 @@ position = Vector2(24, -24)
 sprite_frames = SubResource("SpriteFrames_5v66d")
 animation = &"Jump_Shoot"
 autoplay = "Idle"
+
+[node name="ChargeEffectSprite" type="AnimatedSprite2D" parent="."]
+visible = false
+position = Vector2(24, -24)
+sprite_frames = SubResource("SpriteFrames_k22kr")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(24, -19)
@@ -484,3 +553,25 @@ position = Vector2(9, 0)
 
 [node name="ShotSpawnWalk" type="Marker2D" parent="ShotSpawnPoints"]
 position = Vector2(0, -2)
+
+[node name="AudioPlayers" type="Node2D" parent="."]
+
+[node name="JumpSound" type="AudioStreamPlayer" parent="AudioPlayers"]
+stream = ExtResource("15_1e7my")
+
+[node name="DashSound" type="AudioStreamPlayer" parent="AudioPlayers"]
+stream = ExtResource("16_1iu4k")
+
+[node name="LandSound" type="AudioStreamPlayer" parent="AudioPlayers"]
+stream = ExtResource("17_m0x7a")
+
+[node name="ShotSound" type="AudioStreamPlayer" parent="AudioPlayers"]
+stream = ExtResource("18_5v66d")
+
+[node name="ChargeSound" type="AudioStreamPlayer" parent="AudioPlayers"]
+stream = ExtResource("19_x63xi")
+volume_db = -15.928
+
+[node name="ChargeLoopSound" type="AudioStreamPlayer" parent="AudioPlayers"]
+stream = ExtResource("20_m0x7a")
+volume_db = -15.928
