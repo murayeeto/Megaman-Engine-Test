@@ -561,7 +561,6 @@ stream = ExtResource("15_1e7my")
 
 [node name="DashSound" type="AudioStreamPlayer" parent="AudioPlayers"]
 stream = ExtResource("16_1iu4k")
-volume_db = -3.748
 
 [node name="LandSound" type="AudioStreamPlayer" parent="AudioPlayers"]
 stream = ExtResource("17_m0x7a")

@@ -120,7 +120,7 @@ shape = SubResource("RectangleShape2D_hhm01")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_1kw6c")
 animation = &"ChargedShot"
-frame_progress = 0.0890486
+frame_progress = 0.289894
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
 position = Vector2(0.5, 0)

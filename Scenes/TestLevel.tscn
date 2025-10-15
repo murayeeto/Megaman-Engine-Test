@@ -1,8 +1,10 @@
-[gd_scene load_steps=6 format=4 uid="uid://c1blhn3kdpcqd"]
+[gd_scene load_steps=8 format=4 uid="uid://c1blhn3kdpcqd"]
 
 [ext_resource type="Texture2D" uid="uid://luusopyogtwf" path="res://Assets/Stages/Floor.png" id="1_bhm8u"]
 [ext_resource type="PackedScene" uid="uid://bwxgkthlps6ok" path="res://Scenes/Player.tscn" id="2_5ms4e"]
 [ext_resource type="Script" uid="uid://d3tvw802m361" path="res://Scripts/PlayerCamera.gd" id="3_shgkq"]
+[ext_resource type="AudioStream" uid="uid://drrsuypovg17w" path="res://Assets/Resources/Music/IntroStage.mp3" id="4_ujyaq"]
+[ext_resource type="PackedScene" uid="uid://dkf0vuonv53g1" path="res://Scenes/Boss.tscn" id="5_oy2kj"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5ms4e"]
 texture = ExtResource("1_bhm8u")
@@ -29,3 +31,11 @@ position = Vector2(-100, -111)
 zoom = Vector2(2, 2)
 script = ExtResource("3_shgkq")
 target = NodePath("../Player")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_ujyaq")
+volume_db = -10.306
+autoplay = true
+
+[node name="Boss" parent="." instance=ExtResource("5_oy2kj")]
+position = Vector2(-890, -50)
