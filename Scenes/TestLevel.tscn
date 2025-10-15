@@ -38,4 +38,4 @@ volume_db = -10.306
 autoplay = true
 
 [node name="Boss" parent="." instance=ExtResource("5_oy2kj")]
-position = Vector2(-890, -50)
+position = Vector2(-108, -222)

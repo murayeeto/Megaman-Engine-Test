@@ -577,14 +577,12 @@ autoplay = "Idle"
 collision_layer = 8
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDetector"]
-visible = false
 position = Vector2(-40, 3)
 shape = SubResource("RectangleShape2D_6tp3b")
 
 [node name="AttackTimer" type="Timer" parent="."]
 
 [node name="Attack1Area" type="Area2D" parent="."]
-visible = false
 collision_layer = 8
 script = ExtResource("8_0gjka")
 
@@ -593,47 +591,38 @@ position = Vector2(-46, 2)
 shape = SubResource("CircleShape2D_6tp3b")
 
 [node name="Attack2Area" type="Area2D" parent="."]
-visible = false
 position = Vector2(20, 315)
 collision_layer = 8
 script = ExtResource("8_0gjka")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Attack2Area"]
-visible = false
 position = Vector2(-68, -311)
 shape = SubResource("CircleShape2D_6tp3b")
 
 [node name="Hurtbox" type="Area2D" parent="."]
-visible = false
 collision_layer = 8
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
-visible = false
 position = Vector2(-68, 5.625)
 shape = SubResource("RectangleShape2D_ouxnj")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
 position = Vector2(-68, 5.625)
 shape = SubResource("RectangleShape2D_ouxnj")
 
 [node name="Attack1HurtBox" type="Area2D" parent="."]
-visible = false
 collision_layer = 8
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Attack1HurtBox"]
-visible = false
 position = Vector2(-138, 7)
 shape = SubResource("RectangleShape2D_ouxnj")
 
 [node name="Attack2Hurtbox" type="Area2D" parent="."]
-visible = false
 collision_layer = 8
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Attack2Hurtbox"]
-visible = false
 position = Vector2(-103, 8)
 shape = SubResource("RectangleShape2D_ouxnj")

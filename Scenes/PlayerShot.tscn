@@ -110,7 +110,7 @@ size = Vector2(52, 28)
 
 [node name="PlayerShot" type="Area2D"]
 collision_layer = 4
-collision_mask = 10
+collision_mask = 14
 script = ExtResource("1_7k8md")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -120,7 +120,7 @@ shape = SubResource("RectangleShape2D_hhm01")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_1kw6c")
 animation = &"ChargedShot"
-frame_progress = 0.289894
+frame_progress = 0.347599
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
 position = Vector2(0.5, 0)
